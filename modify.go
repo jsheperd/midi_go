@@ -9,21 +9,21 @@ import (
 )
 
 func main() {
-	//	inp := flag.String("input", "midi1", "midi input device in the /dev/ folder")
+	inp := flag.String("input", "midi1", "midi input device in the /dev/ folder")
 	out := flag.String("output", "midi1", "midi output device in the /dev/ folder")
 	flag.Parse()
 
-	//	inDev := fmt.Sprintf("/dev/%s", *inp)
-	//	fmt.Printf("Input device: %v\n", inDev)
+	inDev := fmt.Sprintf("/dev/%s", *inp)
+	fmt.Printf("Input device: %v\n", inDev)
 
 	outDev := fmt.Sprintf("/dev/%s", *out)
 	fmt.Printf("Output device: %v\n", outDev)
 
-	//	fIn, err := os.Open(inDev)
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//	defer fIn.Close()
+	fIn, err := os.Open(inDev)
+	if err != nil {
+		panic(err)
+	}
+	defer fIn.Close()
 
 	fOut, err := os.OpenFile(outDev, os.O_RDWR, 0600)
 	if err != nil {
@@ -32,8 +32,8 @@ func main() {
 	defer fOut.Close()
 
 	for i := 0; i < 1000; i++ {
-		//	nByte := readNextBytes(fIn, 3)
-		nByte := readNextBytes(fOut, 3)
+		nByte := readNextBytes(fIn, 3)
+		//  nByte := readNextBytes(fOut, 3)
 		if nByte[0] != 0xf8 {
 			nByte[0] += 13
 			fmt.Print(hex.EncodeToString(nByte))
